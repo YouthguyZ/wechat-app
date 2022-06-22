@@ -42,7 +42,7 @@
       </view>
     </view>
     <!-- 回到顶部 -->
-    <view class="goTop icon-top"></view>
+    <view @click="goTop" class="goTop icon-top"></view>
   </view>
 </template>
 
@@ -79,7 +79,8 @@
 		await this.getCategoryList()
 		// 获取楼层列表
 		await this.getfloorList()
-		// 停止下拉
+		
+		// 停止下拉刷新
 		uni.stopPullDownRefresh()
 	},
 	
@@ -88,6 +89,12 @@
       disableScroll(ev) {
         this.pageHeight = ev.pageHeight + "px";
       },
+	  // 返回顶部
+	  goTop(){
+		  uni.pageScrollTo({
+		  	scrollTop:0
+		  })
+	  },
 	 async getSwiperList(){
 		 // 结构数组
 		 const {data:res} = await uni.$http.get('/api/public/v1/home/swiperdata')
