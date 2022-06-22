@@ -8,42 +8,19 @@
       indicator-color="rgba(255, 255, 255, 0.6)"
       indicator-active-color="#fff"
     >
-      <swiper-item>
-        <navigator url="/subpkg/goods/index/index">
-          <image src="http://static.botue.com/ugo/uploads/banner1.png"></image>
-        </navigator>
-      </swiper-item>
-      <swiper-item>
-        <navigator url="/subpkg/goods/index/index">
-          <image src="http://static.botue.com/ugo/uploads/banner2.png"></image>
-        </navigator>
-      </swiper-item>
-      <swiper-item>
-        <navigator url="/subpkg/goods/index/index">
-          <image src="http://static.botue.com/ugo/uploads/banner3.png"></image>
+      <swiper-item v-for="item in swiperList" :key="item.goods_id">
+        <navigator :url="`/subpkg/pages/goods/index?id=${item.goods_id}`">
+          <image :src="item.image_src"></image>
         </navigator>
       </swiper-item>
     </swiper>
     <!-- 导航条 -->
     <view class="navs">
-      <navigator open-type="switchTab" url="/pages/category/index">
+      <navigator v-for="item in CategoryList" :key="item.name" 
+	  :open-type="item.open_type ||  'navigate'" 
+	  :url="item.open_type? `/pages/category/index`:`/subpkg/pages/list/index`">
         <image
-          src="http://static.botue.com/ugo/uploads/icon_index_nav_4@2x.png"
-        ></image>
-      </navigator>
-      <navigator url="/subpkg/pages/list/index">
-        <image
-          src="http://static.botue.com/ugo/uploads/icon_index_nav_3@2x.png"
-        ></image>
-      </navigator>
-      <navigator url="/subpkg/pages/list/index">
-        <image
-          src="http://static.botue.com/ugo/uploads/icon_index_nav_2@2x.png"
-        ></image>
-      </navigator>
-      <navigator url="/subpkg/pages/list/index">
-        <image
-          src="http://static.botue.com/ugo/uploads/icon_index_nav_1@2x.png"
+          :src="item.image_src"
         ></image>
       </navigator>
     </view>
@@ -164,14 +141,20 @@
     data() {
       return {
         pageHeight: "auto",
+		swiperList:[],
+		CategoryList:[]
       };
     },
 
     components: {
       search,
     },
+	// 加载
 	onLoad() {
-		this.getSwiperList()
+		// 获取轮播图
+		this.getSwiperList(),
+		// 获取导航栏目
+		this.getCategoryList()
 	},
 
     methods: {
@@ -179,11 +162,27 @@
         this.pageHeight = ev.pageHeight + "px";
       },
 	 async getSwiperList(){
-		 const res = await uni.$http.get('/api/public/v1/home/swiperdata')
-		 console.log(res);
-		  
-	  }
-    },
+		 // 结构数组
+		 const {data:res} = await uni.$http.get('/api/public/v1/home/swiperdata')
+		 // console.log(res);
+		 if(res.meta.status!==200) uni.showToast({
+		 	title:"获取失败",
+			duration:1500,
+			icon:"none"
+		 })
+		  this.swiperList = res.message
+	  },
+	 async getCategoryList(){
+	 	const {data:res} = await uni.$http.get('/api/public/v1/home/catitems')
+		console.log(res);
+		if(res.meta.status!==200) uni.showToast({
+			title:"获取失败",
+			duration:1500,
+			icon:"none"
+		})
+		this.CategoryList = res.message 
+	 }
+    }
   };
 </script>
 
