@@ -3,7 +3,7 @@ import {
 } from "@escook/request-miniprogram";
 
 // 配置请求根路径
-$http.baseUrl = 'https://api-ugo-web.itheima.net';
+$http.baseUrl = 'https://api-hmugo-web.itheima.net';
 
 // 请求开始之前
 $http.beforeRequest = function(options) {
