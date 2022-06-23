@@ -6,13 +6,19 @@
 		</swiper>
 		<!-- 基本信息 -->
 		<view class="meta">
-			<view class="price">{{ goodsDetail.goods_price }}</view>
+			<view class="price">￥{{ goodsDetail.goods_price }}</view>
 			<view class="name">{{ goodsDetail.goods_name }}</view>
 			<view class="shipment">快递: 免运费</view>
 			<text class="collect icon-star">收藏</text>
 		</view>
+		<!-- <van-button type="primary">按钮</van-button> -->
 		<!-- 商品详情 -->
-		<view class="detail"><rich-text></rich-text></view>
+		<view class="detail">
+			<!-- 富文本 -->
+			<!-- <rich-text>iiii</rich-text> -->
+			<!-- 用V-html 渲染进来 -->
+			<view v-html="goodsDetail.goods_introduce"></view>
+		</view>
 		<!-- 操作 -->
 		<view class="action">
 			<button open-type="contact" class="icon-handset">联系客服</button>
