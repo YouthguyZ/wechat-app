@@ -54,8 +54,8 @@ export default {
 			// 获取表单中的输入关键字
 			query: '',
 			searchList: [],
-			// 搜索历史
-			queryHistory: []
+			// 搜索历史，初始值从本地中读取 小程序 api getStorageSync
+			queryHistory: uni.getStorageSync('history') || []
 		};
 	},
 	methods: {
@@ -77,7 +77,8 @@ export default {
 			this.placeholder = '';
 			// 清空表单
 			this.query = '';
-			this.queryHistory = [];
+			// 清空搜索记录
+			this.searchList = [];
 
 			// 触发父组件自定义事件
 			this.$emit('search', {
@@ -108,6 +109,8 @@ export default {
 			// 将搜索的内容记录到数组中
 			this.queryHistory.push(this.query);
 			console.log(this.queryHistory);
+			// 本地存储数据
+			uni.setStorageSync('history', this.queryHistory);
 		}
 
 		// // 监听用户的输入(不防抖版)
