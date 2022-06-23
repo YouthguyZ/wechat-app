@@ -17,7 +17,7 @@
 		<view class="content">
 			<view class="title">
 				搜索历史
-				<text class="clear"></text>
+				<text class="clear" @click="removeHistory"></text>
 			</view>
 			<view class="history">
 				<navigator
@@ -111,6 +111,11 @@ export default {
 			console.log(this.queryHistory);
 			// 本地存储数据
 			uni.setStorageSync('history', this.queryHistory);
+		},
+		// 清空历史搜索
+		removeHistory() {
+			uni.removeStorageSync('history');
+			this.queryHistory = '';
 		}
 
 		// // 监听用户的输入(不防抖版)
