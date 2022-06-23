@@ -3,7 +3,14 @@
 	<view class="search" :class="{ focused: focused }">
 		<!-- 搜索框 -->
 		<view class="input-wrap" @click="goSearch">
-			<input class="input" v-model="query" type="text" @input="searchQuery" :placeholder="placeholder" />
+			<input
+				class="input"
+				v-model="query"
+				type="text"
+				@confirm="addHistory"
+				@input="searchQuery"
+				:placeholder="placeholder"
+			/>
 			<text class="cancle" @click.stop="cancleSearch">取消</text>
 		</view>
 		<!-- 搜索结果 -->
@@ -13,13 +20,14 @@
 				<text class="clear"></text>
 			</view>
 			<view class="history">
-				<navigator class="navigator" url="/subpkg/pages/list/index">小米</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">智能电视</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">小米空气净化器</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">西门子洗碗机</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">华为手机</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">苹果</navigator>
-				<navigator class="navigator" url="/subpkg/pages/list/index">锤子</navigator>
+				<navigator
+					v-for="item in queryHistory"
+					:key="item"
+					class="navigator"
+					:url="`/subpkg/pages/list/index?query=${item}`"
+				>
+					{{ item }}
+				</navigator>
 			</view>
 			<!-- 结果 -->
 			<scroll-view v-if="searchList.length" scroll-y class="result">
@@ -45,7 +53,9 @@ export default {
 			placeholder: '',
 			// 获取表单中的输入关键字
 			query: '',
-			searchList: []
+			searchList: [],
+			// 搜索历史
+			queryHistory: []
 		};
 	},
 	methods: {
@@ -61,9 +71,13 @@ export default {
 			// 隐藏tabBar
 			uni.hideTabBar();
 		},
+		// 取消事件
 		cancleSearch() {
 			this.focused = false;
 			this.placeholder = '';
+			// 清空表单
+			this.query = '';
+			this.queryHistory = [];
 
 			// 触发父组件自定义事件
 			this.$emit('search', {
@@ -85,7 +99,17 @@ export default {
 					icon: 'none'
 				});
 			this.searchList = res.message;
-		}, 500)
+		}, 500),
+
+		// 历史记录
+		addHistory() {
+			// 如果有重复搜索的关键字，不再重复记录
+			if (this.queryHistory.includes(this.query)) return;
+			// 将搜索的内容记录到数组中
+			this.queryHistory.push(this.query);
+			console.log(this.queryHistory);
+		}
+
 		// // 监听用户的输入(不防抖版)
 		// async searchQuery() {
 		// const { data: res } = await uni.$http.get('/api/public/v1/goods/qsearch', {
