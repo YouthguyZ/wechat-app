@@ -11,7 +11,7 @@
 			<view class="shipment">快递: 免运费</view>
 			<text class="collect icon-star">收藏</text>
 		</view>
-		<!-- <van-button type="primary">按钮</van-button> -->
+		<van-button type="primary">{{ carts }}</van-button>
 		<!-- 商品详情 -->
 		<view class="detail">
 			<!-- 富文本 -->
@@ -30,7 +30,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
+	computed: {
+		...mapState('cart', ['carts'])
+	},
 	data() {
 		return {
 			goods_id: null,
