@@ -11,7 +11,7 @@
 			<view class="shipment">快递: 免运费</view>
 			<text class="collect icon-star">收藏</text>
 		</view>
-		<van-button type="primary">{{ carts }}</van-button>
+		<van-button type="primary">{{ carts.goods_count }}</van-button>
 		<!-- 商品详情 -->
 		<view class="detail">
 			<!-- 富文本 -->
@@ -22,18 +22,19 @@
 		<!-- 操作 -->
 		<view class="action">
 			<button open-type="contact" class="icon-handset">联系客服</button>
-			<text class="cart icon-cart" @click="goCart">购物车</text>
-			<text class="add">加入购物车</text>
+			<text class="cart icon-cart" @click="goCart">购物车{{ cartCount }}</text>
+			<text class="add" @click="addToCart">加入购物车</text>
 			<text class="buy" @click="createOrder">立即购买</text>
 		</view>
 	</view>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
 	computed: {
-		...mapState('cart', ['carts'])
+		...mapState('cart', ['carts']),
+		...mapGetters('cart', ['cartCount'])
 	},
 	data() {
 		return {
@@ -71,6 +72,22 @@ export default {
 					icon: 'none'
 				});
 			this.goodsDetail = res.message;
+		},
+
+		// 添加购物车
+		addToCart() {
+			console.log('准备添加购物车...');
+			// 购物车中商口所要展示的信息
+			const goods = {
+				goods_id: this.goodsDetail.goods_id, // 商品id
+				goods_name: this.goodsDetail.goods_name, // 商品名称
+				goods_price: this.goodsDetail.goods_price, // 商品价格
+				goods_small_logo: this.goodsDetail.goods_small_logo, // 商品图片
+				goods_count: 1, // 购买数量
+				goods_state: true // 商品选中状态
+			};
+			// 将数据传给 mutations
+			this.$store.commit('cart/addToCart', goods);
 		}
 	}
 };
