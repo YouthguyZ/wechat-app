@@ -4,13 +4,17 @@
 		<template v-if="carts.length">
 			<!-- 收货信息 -->
 			<view class="shipment">
-				<view class="dt">收货人:</view>
-				<view class="dd meta">
-					<text class="name">刘德华</text>
-					<text class="phone">13535337057</text>
-				</view>
-				<view class="dt">收货地址:</view>
-				<view class="dd">广东省广州市天河区一珠吉</view>
+				<template v-if="address">
+					<view class="dt">收货人:</view>
+					<view class="dd meta">
+						<text class="name">刘德华</text>
+						<text class="phone">13535337057</text>
+					</view>
+					<view class="dt">收货地址:</view>
+					<view class="dd">广东省广州市天河区一珠吉</view>
+				</template>
+				<button v-else type="primary" @click="getAddress">获取用户地址</button>
+				>
 			</view>
 			<!-- 购物车 -->
 			<view class="carts">
@@ -59,7 +63,7 @@
 		</template>
 		<view class="tips">
 			这里空空如也~
-			<button style="margin-top: 10px;width: 150px;" type="primary" @click="shopping">去买点啥吧~</button>
+			<button v-else style="margin-top: 10px;width: 150px;" type="primary" @click="shopping">去买点啥吧~</button>
 		</view>
 	</view>
 </template>
@@ -68,6 +72,7 @@
 import { mapGetters, mapState } from 'vuex';
 export default {
 	computed: {
+		...mapState('user', ['address']),
 		...mapState('cart', ['carts']),
 		...mapGetters('cart', ['allChecked', 'checkedCount', 'amount'])
 	},
@@ -94,6 +99,10 @@ export default {
 		// 增加数量
 		addCount(index) {
 			this.$store.commit('cart/addCount', index);
+		},
+		// 获取用户地址
+		getAddress() {
+			uni.chooseAddress({});
 		}
 	}
 };

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import vuex from 'vuex'
 
 import cartModule from './cart.js'
+import userModule from './user'
 // 注册使用
 Vue.use(vuex)
 
@@ -12,7 +13,8 @@ const store = new vuex.Store({
 		msg: '嘎嘎好用'
 	},
 	modules: {
-		'cart': cartModule
+		'cart': cartModule,
+		'user': userModule
 	}
 })
 export default store
