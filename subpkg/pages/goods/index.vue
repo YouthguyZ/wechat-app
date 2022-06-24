@@ -11,7 +11,8 @@
 			<view class="shipment">快递: 免运费</view>
 			<text class="collect icon-star">收藏</text>
 		</view>
-		<van-button type="primary">{{ carts.goods_count }}</van-button>
+		<!-- 测试 -->
+		<!-- <van-button type="primary">{{ carts.goods_count }}</van-button> -->
 		<!-- 商品详情 -->
 		<view class="detail">
 			<!-- 富文本 -->
