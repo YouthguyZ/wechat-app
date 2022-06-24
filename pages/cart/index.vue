@@ -7,14 +7,16 @@
 				<template v-if="address">
 					<view class="dt">收货人:</view>
 					<view class="dd meta">
-						<text class="name">刘德华</text>
-						<text class="phone">13535337057</text>
+						<text class="name">{{ address.userName }}</text>
+						<text class="phone">{{ address.telNumber }}</text>
 					</view>
 					<view class="dt">收货地址:</view>
-					<view class="dd">广东省广州市天河区一珠吉</view>
+					<view class="dd">
+						{{ address.provinceName }} {{ address.cityName }} {{ address.countyName }}
+						{{ address.detailInfo }}
+					</view>
 				</template>
 				<button v-else type="primary" @click="getAddress">获取用户地址</button>
-				>
 			</view>
 			<!-- 购物车 -->
 			<view class="carts">
@@ -101,8 +103,11 @@ export default {
 			this.$store.commit('cart/addCount', index);
 		},
 		// 获取用户地址
-		getAddress() {
-			uni.chooseAddress({});
+		async getAddress() {
+			const [err, { errMsg, ...address }] = await uni.chooseAddress();
+			console.log(address);
+			// 调用 mutations 将地址存到 vuex 和 本地存储
+			this.$store.commit('user/getAddress', address);
 		}
 	}
 };
