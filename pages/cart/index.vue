@@ -58,6 +58,7 @@
 					合计:
 					<text>￥</text>
 					<label>{{ amount }}</label>
+					s
 					<text>.00</text>
 				</view>
 				<view class="pay">结算({{ checkedCount }})</view>
