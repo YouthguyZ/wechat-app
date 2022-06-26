@@ -51,22 +51,21 @@
 			<!-- 其它 -->
 			<view class="extra">
 				<label class="checkall" @click="toggleAll">
-					<icon type="success" :color="allChecked ? '#ea4451' : '#ccc'" size="20" size="20"></icon>
+					<icon type="success" :color="allChecked ? '#ea4451' : '#ccc'" size="20"></icon>
 					全选
 				</label>
 				<view class="total">
 					合计:
 					<text>￥</text>
 					<label>{{ amount }}</label>
-					s
 					<text>.00</text>
 				</view>
 				<view class="pay">结算({{ checkedCount }})</view>
 			</view>
 		</template>
-		<view class="tips">
+		<view v-else class="tips">
 			这里空空如也~
-			<button v-else style="margin-top: 10px;width: 150px;" type="primary" @click="shopping">去买点啥吧~</button>
+			<button style="margin-top: 10px;width: 150px;" type="primary" @click="shopping">去买点啥吧~</button>
 		</view>
 	</view>
 </template>
