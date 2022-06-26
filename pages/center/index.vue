@@ -3,11 +3,8 @@
 		<!-- 个人资料 -->
 		<view class="profile">
 			<view class="meta">
-				<image
-					class="avatar"
-					:src="userInfo.avatarUrl || `http://static.botue.com/ugo/uploads/monkey.png`"
-				></image>
-				<text class="nickname">{{ userInfo.nickName || '微信用户' }}</text>
+				<image class="avatar" :src="userProfile.avatarUrl"></image>
+				<text class="nickname">{{ userProfile.nickName }}</text>
 			</view>
 		</view>
 		<!-- 统计 -->
@@ -44,19 +41,20 @@
 		<!-- 其它 -->
 		<view class="extra">
 			<view class="item icon-arrow" @click="makePhone">联系客服</view>
+			<view class="item icon-arrow" @click="getProfile">个人资料</view>
 			<button class="item icon-arrow" open-type="feedback">意见反馈</button>
 		</view>
-		<button type="primary" @click="getProfile">获取用户信息</button>
+		<!-- <button type="primary" @click="getProfile">获取用户信息</button> -->
 	</view>
 </template>
 
 <script>
 // 使用vuex中数据
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 export default {
 	computed: {
-		...mapState('user', ['userProfile']),
-		...mapGetters('user', ['userInfo'])
+		...mapState('user', ['userProfile'])
+		// ...mapGetters('user', ['userInfo'])
 	},
 	methods: {
 		makePhone() {
@@ -64,13 +62,18 @@ export default {
 				phoneNumber: '10086'
 			});
 		},
-		async getProfile() {
-			const [err, userProfile] = await uni.getUserProfile({
-				desc: '获取用户信息'
+		getProfile() {
+			// const [err, userProfile] = await uni.getUserProfile({
+			// 	desc: '获取用户信息'
+			// });
+			// console.log(userProfile);
+			// // 获取信息 保存到本地
+			// this.$store.commit('user/getProfile', userProfile);
+
+			// 改写跳转到信息页
+			uni.navigateTo({
+				url: '/subpkg/pages/profile/index'
 			});
-			console.log(userProfile);
-			// 获取信息 保存到本地
-			this.$store.commit('user/getProfile', userProfile);
 		}
 	}
 };
