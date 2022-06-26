@@ -8,11 +8,23 @@ export default {
 		},
 		token: uni.getStorageSync('token') || ''
 	},
-	// getters: {
-	// 	userInfo(state) {
-	// 		return state.userProfile.userInfo
-	// 	}
-	// },
+	getters: {
+		// userInfo(state) {
+		// 	return state.userProfile.userInfo
+		// }
+		// 看这里是新增加的
+		fullAddress(state) {
+			if (!state.address) return '';
+			const {
+				provinceName,
+				cityName,
+				countyName,
+				detailInfo
+			} = state.address;
+			// 拼凑完整的地址
+			return provinceName + cityName + countyName + detailInfo;
+		}
+	},
 	mutations: {
 		// 获取地址
 		getAddress(state, address) {

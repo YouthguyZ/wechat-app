@@ -12,7 +12,7 @@
 			<text class="collect icon-star">收藏</text>
 		</view>
 		<!-- 测试 -->
-		<!-- <van-button type="primary">{{ carts.goods_count }}</van-button> -->
+		<!-- <van-button type="primary">{{ carts.goods_number }}</van-button> -->
 		<!-- 商品详情 -->
 		<view class="detail">
 			<!-- 富文本 -->
@@ -84,7 +84,7 @@ export default {
 				goods_name: this.goodsDetail.goods_name, // 商品名称
 				goods_price: this.goodsDetail.goods_price, // 商品价格
 				goods_small_logo: this.goodsDetail.goods_small_logo, // 商品图片
-				goods_count: 1, // 购买数量
+				goods_number: 1, // 购买数量
 				goods_state: true // 商品选中状态
 			};
 			// 将数据传给 mutations

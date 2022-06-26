@@ -17,7 +17,7 @@ export default {
 				// 如果商品状态未选中不参与统计
 				if (!item.goods_state) return count;
 				// 累加每个商品的购买数量
-				return count += item.goods_count;
+				return count += item.goods_number;
 			}, 0)
 		},
 		// 金额
@@ -26,7 +26,7 @@ export default {
 				// 如果商品非选中的则不参与计算
 				if (!item.goods_state) return amount;
 				// 金额 = 单价 * 数量
-				return amount += item.goods_count * item.goods_price;
+				return amount += item.goods_number * item.goods_price;
 			}, 0)
 		}
 	},
@@ -41,7 +41,7 @@ export default {
 				state.carts.push(goods);
 			} else {
 				// 存在相同商品时，将数量加 1
-				result.goods_count += 1
+				result.goods_number += 1
 			}
 			// 存储
 			this.commit('cart/saveStorage')
@@ -64,15 +64,15 @@ export default {
 		},
 		addCount(state, index) {
 			// 商品购买数量加 1
-			state.carts[index].goods_count += 1,
+			state.carts[index].goods_number += 1,
 				// 本地存储也要更新
 				this.commit('cart/saveStorage');
 		},
 		subCount(state, index) {
 			// 最少购买 1 件
-			if (state.carts[index].goods_count <= 1) return;
+			if (state.carts[index].goods_number <= 1) return;
 			// 商品购买数量减 1
-			state.carts[index].goods_count -= 1,
+			state.carts[index].goods_number -= 1,
 				// 本地存储也要更新
 				this.commit('cart/saveStorage');
 		},

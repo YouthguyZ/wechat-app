@@ -37,7 +37,7 @@
 							<!-- 加减 -->
 							<view class="amount">
 								<text class="reduce" @click="subCount(index)">-</text>
-								<input type="number" :value="item.goods_count" class="number" />
+								<input type="number" :value="item.goods_number" class="number" />
 								<text class="plus" @click="addCount(index)">+</text>
 							</view>
 						</view>
@@ -60,7 +60,7 @@
 					<label>{{ amount }}</label>
 					<text>.00</text>
 				</view>
-				<view class="pay">结算({{ checkedCount }})</view>
+				<view class="pay" @click="goPaymen">结算({{ checkedCount }})</view>
 			</view>
 		</template>
 		<view v-else class="tips">
@@ -73,10 +73,19 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 export default {
+	data() {
+		return {
+			order_number: ''
+		};
+	},
 	computed: {
 		...mapState('user', ['address']),
 		...mapState('cart', ['carts']),
-		...mapGetters('cart', ['allChecked', 'checkedCount', 'amount'])
+		...mapGetters('cart', ['allChecked', 'checkedCount', 'amount']),
+		...mapGetters('user', ['fullAddress']),
+		goods() {
+			return this.carts.filter(item => item.goods_state);
+		}
 	},
 	methods: {
 		// 跳转去购物
@@ -118,6 +127,55 @@ export default {
 			// 调用 mutations 将地址存到 vuex 和 本地存储
 			this.$store.commit('user/getAddress', address);
 			// #endif
+		},
+		// 支付
+		async goPaymen() {
+			await this.createOrder();
+			// 检测订单是否创建成功
+			if (!this.order_number) {
+				return uni.showToast({
+					title: '订单创建失败!',
+					icon: 'none'
+				});
+			}
+
+			const { data: res } = await uni.$http.post('/api/public/v1/my/orders/req_unifiedorder', {
+				order_number: this.order_number
+			});
+			console.log(res);
+			// 打开支付窗口 小程序支付 api
+			uni.requestPayment({
+				...res.message.pay,
+				complete() {
+					uni.navigateTo({
+						url: '/subpkg/pages/order/index'
+					});
+				}
+			});
+		},
+		// 创建订单
+		async createOrder() {
+			// 校验本地是否有商品
+			if (this.goods.length === 0) {
+				return uni.showToast({
+					title: '没有多余商品',
+					icon: 'none'
+				});
+			}
+			// 校验地址是否有
+			if (!this.fullAddress)
+				uni.showToast({
+					title: '无地址',
+					icon: 'none'
+				});
+			// 调用接口生成新订单
+			const { data: res } = await uni.$http.post('/api/public/v1/my/orders/create', {
+				order_price: this.amount,
+				consignee_addr: this.fullAddress,
+				goods: this.goods
+			});
+			// 验证是否创建订单成功
+			if (res.meta.status === 200) this.order_number = res.message.order_number;
 		}
 	}
 };
