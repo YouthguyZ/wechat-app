@@ -1,4 +1,39 @@
-@import '../common/index.wxss';
+<template>
+<uni-shadow-root class="@vant-weapp-icon-index"><view :class="computed.rootClass({ classPrefix, name })" :style="computed.rootStyle({ customStyle, color, size })" @click="onClick">
+  <van-info v-if="info !== null || dot" :dot="dot" :info="info" custom-class="van-icon__info"></van-info>
+  <image v-if="computed.isImage(name)" :src="name" mode="aspectFit" class="van-icon__image"></image>
+</view></uni-shadow-root>
+</template>
+<wxs src="./index.wxs" module="computed"></wxs>
+<script>
+import VanInfo from '../info/index.vue'
+global['__wxVueOptions'] = {components:{'van-info': VanInfo}}
+
+global['__wxRoute'] = '@vant/weapp/icon/index'
+import { VantComponent } from '../common/component';
+VantComponent({
+    props: {
+        dot: Boolean,
+        info: null,
+        size: null,
+        color: String,
+        customStyle: String,
+        classPrefix: {
+            type: String,
+            value: 'van-icon',
+        },
+        name: String,
+    },
+    methods: {
+        onClick() {
+            this.$emit('click');
+        },
+    },
+});
+export default global['__wxComponents']['@vant/weapp/icon/index']
+</script>
+<style platform="mp-weixin">
+@import '../common/index.css';
 
 .van-icon {
 	text-rendering: auto;
@@ -1005,7 +1040,7 @@
 	src: url(https://at.alicdn.com/t/font_2553510_iv4v8nulyz.woff2?t=1649083952952) format("woff2"), url(https://at.alicdn.com/t/font_2553510_iv4v8nulyz.woff?t=1649083952952) format("woff"), url(https://at.alicdn.com/t/font_2553510_iv4v8nulyz.ttf?t=1649083952952) format("truetype")
 }
 
-:host {
+.@vant-weapp-icon-index {
 	align-items: center;
 	display: inline-flex;
 	justify-content: center
@@ -1024,3 +1059,4 @@
 .van-icon__info {
 	z-index: 1
 }
+</style>

@@ -65,7 +65,7 @@ export default {
 
 			// 触发父组件自定义事件
 			this.$emit('search', {
-				pageHeight: uni.getSystemInfoSync().windowHeight
+				pageHeight: uni.getSystemInfoSync().windowHeight + 'px'
 			});
 
 			// 隐藏tabBar

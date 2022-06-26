@@ -104,10 +104,20 @@ export default {
 		},
 		// 获取用户地址
 		async getAddress() {
+			// 用条件编译方法 ifndef 为判断 不在这个微信环境运行时 结束时加一个 endif
+			// #ifndef MP-WEIXIN
+			uni.showToast({
+				title: '仅在小程序有效!'
+			});
+			// #endif
+
+			// #ifdef MP-WEIXIN
+			// 获取用户的收货地址
 			const [err, { errMsg, ...address }] = await uni.chooseAddress();
 			console.log(address);
 			// 调用 mutations 将地址存到 vuex 和 本地存储
 			this.$store.commit('user/getAddress', address);
+			// #endif
 		}
 	}
 };
